@@ -1,4 +1,7 @@
-# 飞书文档代码抓取与运行记录
+# Grand Luxury Tree v17.6.5 · 飞书文档代码抓取与运行记录
+
+- 仓库：https://github.com/Hwescon/christmas-tree-v17.6
+- 在线直接玩（GitHub Pages，需允许摄像头 + 能访问 jsdelivr）：https://hwescon.github.io/christmas-tree-v17.6/
 
 来源：https://my.feishu.cn/wiki/XJlawBeOOiBFStk7yAfcYYcXngk
 文档标题：**12.13号圣诞树代码🎄V17.6版本**
