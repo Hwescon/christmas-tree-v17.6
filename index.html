@@ -104,6 +104,13 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loader-text { color: #d4af37; font-size: 12px; letter-spacing: 4px; margin-top: 25px; font-family: 'Cinzel', serif; opacity: 0.8; }
         
+
+        /* ================= 4. 摄像头状态 ================= */
+        #cam-msg { position: absolute; left: 0; right: 0; bottom: 0; padding: 2px 4px; font-size: 9px; line-height: 1.25;
+            color: #f1d78a; background: linear-gradient(transparent, rgba(0,0,0,0.8)); text-align: center; pointer-events: none; }
+        .cam-retry { position: absolute; top: 2px; left: 2px; display: none; padding: 2px 7px; font-size: 10px; line-height: 1.4;
+            color: #050505; background: #d4af37; border: none; border-radius: 3px; cursor: pointer; z-index: 31; font-family: inherit; }
+        .cam-retry.show { display: block; }
         #gesture-hint { position: absolute; bottom: 10px; width: 100%; text-align: center; color: rgba(212,175,55,0.7); font-size: 10px; pointer-events: none; text-shadow: 0 0 5px #000; z-index: 5; }
 
         /* ================= 3. 移动端适配 (v17.6.5-m) ================= */
@@ -176,7 +183,7 @@
     </style><script type="importmap">
         { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/", "@mediapipe/tasks-vision": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/+esm" } }
     </script></head><body><div id="loader"><div class="spinner"></div><div class="loader-text">SYSTEM INITIALIZING</div></div><div id="canvas-container"></div><div id="title-container"><h1 id="display-line1" class="title-line">Merry</h1><h1 id="display-line2" class="title-line">Christmas</h1></div><div id="ui-layer"><div id="top-right-controls"><button class="elegant-btn glass-panel" id="fs-btn" onclick="toggleFullScreen()" style="padding: 6px 12px;">⛶ 全屏显示</button><button class="elegant-btn glass-panel" id="toggle-ui-btn" onclick="toggleUI()" style="padding: 6px 12px;">👁 隐藏界面</button></div><div id="left-sidebar"><div class="top-left-panel glass-panel"><div class="ui-title-main">场景定制</div> 
-                <div class="ui-title-sub">祝福语录</div><div class="control-row"><input type="text" id="input-line1" class="input-glass" placeholder="第一行文字" oninput="updateTextConfig()"><input type="text" id="input-line2" class="input-glass" placeholder="第二行文字" oninput="updateTextConfig()" style="margin-top:2px;"></div><div class="ui-title-sub">字体风格</div><select id="font-select" class="input-glass" onchange="updateTextConfig()"><option value="style1">书法韵味</option><option value="style2">古典衬线</option><option value="style3">优雅手写</option><option value="style4">艺术线条</option><option value="style5">复古重磅</option></select><div class="control-row"><div class="ui-title-sub" style="margin-top:6px;">大小 & 颜色</div><div style="display:flex; gap:8px; align-items:center;"><input type="range" min="50" max="250" value="100" id="slider-fontsize" oninput="updateTextConfig()"><input type="color" id="color-picker" value="#fceea7" oninput="updateTextConfig()" style="width:30px; height:20px; border:none;"></div></div><div class="ui-title-sub" style="border-top:1px solid rgba(255,255,255,0.05); padding-top:6px; margin-top:6px;">背景音乐</div><div style="display:flex; gap:8px; margin-bottom:4px;"><button class="elegant-btn" onclick="toggleMusicPlay()" id="play-btn" style="flex:2; font-size:14px;">⏯</button><button class="elegant-btn" onclick="replayMusic()" style="flex:1; font-size:14px;">⟲</button></div><div class="control-row"><span class="control-label" style="text-align:center;">音量调节</span><input type="range" min="0" max="100" value="50" id="slider-volume" oninput="updateVolume(this.value)"></div><div class="ui-title-sub" style="border-top:1px solid rgba(255,255,255,0.05); padding-top:6px; margin-top:6px;">粒子控制</div><div class="particle-scroll-container"><div class="control-row"><span class="control-label">装饰密度 (树)</span><input type="range" min="500" max="3000" value="1500" id="slider-tree"></div><div class="control-row"><span class="control-label">星尘密度 (背景)</span><input type="range" min="500" max="5000" value="2500" id="slider-dust"></div><div class="control-row"><span class="control-label">雪花数量</span><input type="range" min="0" max="3000" step="100" value="1500" id="slider-snow-count" onchange="updateSnowSettings()"></div><div class="control-row"><span class="control-label">雪花大小</span><input type="range" min="0.05" max="0.3" step="0.01" value="0.12" id="slider-snow-size" onchange="updateSnowSettings()"></div><div class="control-row"><span class="control-label">下落速度</span><input type="range" min="1.0" max="8.0" step="0.5" value="3.5" id="slider-snow-speed" oninput="updateSnowSpeed(this.value)"></div></div><button class="elegant-btn" style="width:100%; margin-top:8px;" onclick="applyParticleSettings()">⚡ 重置场景</button></div><div class="top-left-panel glass-panel"><div class="ui-title-main">交互中控</div><div class="ui-title-sub">形态切换</div><div class="interaction-grid"><button class="elegant-btn" style="flex:1;" onclick="setMode('TREE')">聚合 (Space)</button><button class="elegant-btn" style="flex:1;" onclick="setMode('SCATTER')">散开 (Z)</button></div><button class="elegant-btn" style="width:100%;" onclick="triggerPhotoGrab()">抓取照片 (X)</button><div class="control-row" style="margin-top:8px;"><span class="control-label">旋转速度 (散开)</span><input type="range" min="0.1" max="5.0" step="0.1" value="1.4" oninput="updateRotationSpeed(this.value)"></div><div class="direction-pad"><div></div><div class="dir-btn" onmousedown="startRotate('up')" onmouseup="stopRotate()" onmouseleave="stopRotate()">▲</div><div></div><div class="dir-btn" onmousedown="startRotate('left')" onmouseup="stopRotate()" onmouseleave="stopRotate()">◀</div><div class="dir-btn" onclick="resetRotation()" style="font-size:10px;">●</div><div class="dir-btn" onmousedown="startRotate('right')" onmouseup="stopRotate()" onmouseleave="stopRotate()">▶</div><div></div><div class="dir-btn" onmousedown="startRotate('down')" onmouseup="stopRotate()" onmouseleave="stopRotate()">▼</div><div></div></div></div></div><div class="bottom-left-panel glass-panel"><div class="ui-title-main" style="font-size:12px; margin-bottom:5px;">资源管理</div><label class="elegant-btn"> + 上传照片 <input type="file" id="file-input" multiple accept="image/*"> </label><button class="elegant-btn" onclick="openDeleteManager()">▣ 管理照片</button><label class="elegant-btn" id="music-upload-label"> ♫ 背景音乐 <input type="file" id="music-input" accept=".mp3,audio/mpeg"> </label><button class="elegant-btn" id="toggle-cam-btn" onclick="toggleCameraDisplay()">📷 隐藏画面</button></div></div><div id="gesture-hint">正在初始化系统...</div><div id="webcam-wrapper"><canvas id="webcam-canvas" width="320" height="240"></canvas><div id="cam-status"></div></div><video id="webcam-video" autoplay playsinline muted style="display:none"></video><div id="delete-manager" class="hidden"><div class="manager-title">照片库管理</div><div id="photo-grid"></div><div class="manager-actions"><button class="elegant-btn btn-red glass-panel" onclick="clearAllPhotos()" style="padding: 8px 20px;">清空所有</button><button class="elegant-btn glass-panel" onclick="closeDeleteManager()" style="padding: 8px 20px;">关闭</button></div></div><div id="mobile-bar">
+                <div class="ui-title-sub">祝福语录</div><div class="control-row"><input type="text" id="input-line1" class="input-glass" placeholder="第一行文字" oninput="updateTextConfig()"><input type="text" id="input-line2" class="input-glass" placeholder="第二行文字" oninput="updateTextConfig()" style="margin-top:2px;"></div><div class="ui-title-sub">字体风格</div><select id="font-select" class="input-glass" onchange="updateTextConfig()"><option value="style1">书法韵味</option><option value="style2">古典衬线</option><option value="style3">优雅手写</option><option value="style4">艺术线条</option><option value="style5">复古重磅</option></select><div class="control-row"><div class="ui-title-sub" style="margin-top:6px;">大小 & 颜色</div><div style="display:flex; gap:8px; align-items:center;"><input type="range" min="50" max="250" value="100" id="slider-fontsize" oninput="updateTextConfig()"><input type="color" id="color-picker" value="#fceea7" oninput="updateTextConfig()" style="width:30px; height:20px; border:none;"></div></div><div class="ui-title-sub" style="border-top:1px solid rgba(255,255,255,0.05); padding-top:6px; margin-top:6px;">背景音乐</div><div style="display:flex; gap:8px; margin-bottom:4px;"><button class="elegant-btn" onclick="toggleMusicPlay()" id="play-btn" style="flex:2; font-size:14px;">⏯</button><button class="elegant-btn" onclick="replayMusic()" style="flex:1; font-size:14px;">⟲</button></div><div class="control-row"><span class="control-label" style="text-align:center;">音量调节</span><input type="range" min="0" max="100" value="50" id="slider-volume" oninput="updateVolume(this.value)"></div><div class="ui-title-sub" style="border-top:1px solid rgba(255,255,255,0.05); padding-top:6px; margin-top:6px;">粒子控制</div><div class="particle-scroll-container"><div class="control-row"><span class="control-label">装饰密度 (树)</span><input type="range" min="500" max="3000" value="1500" id="slider-tree"></div><div class="control-row"><span class="control-label">星尘密度 (背景)</span><input type="range" min="500" max="5000" value="2500" id="slider-dust"></div><div class="control-row"><span class="control-label">雪花数量</span><input type="range" min="0" max="3000" step="100" value="1500" id="slider-snow-count" onchange="updateSnowSettings()"></div><div class="control-row"><span class="control-label">雪花大小</span><input type="range" min="0.05" max="0.3" step="0.01" value="0.12" id="slider-snow-size" onchange="updateSnowSettings()"></div><div class="control-row"><span class="control-label">下落速度</span><input type="range" min="1.0" max="8.0" step="0.5" value="3.5" id="slider-snow-speed" oninput="updateSnowSpeed(this.value)"></div></div><button class="elegant-btn" style="width:100%; margin-top:8px;" onclick="applyParticleSettings()">⚡ 重置场景</button></div><div class="top-left-panel glass-panel"><div class="ui-title-main">交互中控</div><div class="ui-title-sub">形态切换</div><div class="interaction-grid"><button class="elegant-btn" style="flex:1;" onclick="setMode('TREE')">聚合 (Space)</button><button class="elegant-btn" style="flex:1;" onclick="setMode('SCATTER')">散开 (Z)</button></div><button class="elegant-btn" style="width:100%;" onclick="triggerPhotoGrab()">抓取照片 (X)</button><div class="control-row" style="margin-top:8px;"><span class="control-label">旋转速度 (散开)</span><input type="range" min="0.1" max="5.0" step="0.1" value="1.4" oninput="updateRotationSpeed(this.value)"></div><div class="direction-pad"><div></div><div class="dir-btn" onmousedown="startRotate('up')" onmouseup="stopRotate()" onmouseleave="stopRotate()">▲</div><div></div><div class="dir-btn" onmousedown="startRotate('left')" onmouseup="stopRotate()" onmouseleave="stopRotate()">◀</div><div class="dir-btn" onclick="resetRotation()" style="font-size:10px;">●</div><div class="dir-btn" onmousedown="startRotate('right')" onmouseup="stopRotate()" onmouseleave="stopRotate()">▶</div><div></div><div class="dir-btn" onmousedown="startRotate('down')" onmouseup="stopRotate()" onmouseleave="stopRotate()">▼</div><div></div></div></div></div><div class="bottom-left-panel glass-panel"><div class="ui-title-main" style="font-size:12px; margin-bottom:5px;">资源管理</div><label class="elegant-btn"> + 上传照片 <input type="file" id="file-input" multiple accept="image/*"> </label><button class="elegant-btn" onclick="openDeleteManager()">▣ 管理照片</button><label class="elegant-btn" id="music-upload-label"> ♫ 背景音乐 <input type="file" id="music-input" accept=".mp3,audio/mpeg"> </label><button class="elegant-btn" id="toggle-cam-btn" onclick="toggleCameraDisplay()">📷 隐藏画面</button></div></div><div id="gesture-hint">正在初始化系统...</div><div id="webcam-wrapper"><canvas id="webcam-canvas" width="320" height="240"></canvas><div id="cam-status"></div><div id="cam-msg">摄像头未启动</div><button id="cam-retry" class="cam-retry" title="重试摄像头">重试</button></div><video id="webcam-video" autoplay playsinline muted style="display:none"></video><div id="delete-manager" class="hidden"><div class="manager-title">照片库管理</div><div id="photo-grid"></div><div class="manager-actions"><button class="elegant-btn btn-red glass-panel" onclick="clearAllPhotos()" style="padding: 8px 20px;">清空所有</button><button class="elegant-btn glass-panel" onclick="closeDeleteManager()" style="padding: 8px 20px;">关闭</button></div></div><div id="mobile-bar">
             <button class="mbtn" id="mb-tree"><b>🎄</b><span>聚合</span></button>
             <button class="mbtn" id="mb-scatter"><b>✨</b><span>散开</span></button>
             <button class="mbtn" id="mb-grab"><b>🖼</b><span>抓图</span></button>
@@ -261,14 +268,20 @@ const DB_NAME = "GrandTreeDB_v17_Clean";
 
         window.updateRotationSpeed=(v)=> { CONFIG.interaction.rotationSpeed = parseFloat(v); };
         
+        function refreshHint() {
+            const hint = document.getElementById('gesture-hint');
+            if (!hint) return;
+            const modeName = STATE.mode === 'TREE' ? '聚合 (圣诞树)' : (STATE.mode === 'SCATTER' ? '散开 (星云)' : '抓取照片');
+            const tip = (typeof IS_MOBILE !== 'undefined' && IS_MOBILE) ? ' · 拖动旋转 / 双指缩放' : '';
+            const cam = (typeof camHint === 'function') ? camHint() : '';
+            const text = '状态: ' + modeName + tip + cam;
+            if (hint.innerText !== text) hint.innerText = text;
+        }
+
         window.setMode = function(mode) {
             STATE.mode = mode;
             STATE.focusTarget = null;
-            const hint = document.getElementById('gesture-hint');
-            const tip = (typeof IS_MOBILE !== 'undefined' && IS_MOBILE) ? " · 拖动旋转 / 双指缩放" : "";
-            if(mode === 'TREE') hint.innerText = "状态: 聚合 (圣诞树)" + tip;
-            else if(mode === 'SCATTER') hint.innerText = "状态: 散开 (星云)" + tip;
-            else if(mode === 'FOCUS') hint.innerText = "状态: 抓取照片" + tip;
+            refreshHint();
         }
 
         window.triggerPhotoGrab=()=> { 
@@ -357,7 +370,7 @@ window.addEventListener('keydown', (e) => {
         function initThree() { const c=document.getElementById('canvas-container'); scene=new THREE.Scene(); scene.background=new THREE.Color(CONFIG.colors.bg); scene.fog=new THREE.FogExp2(CONFIG.colors.bg,0.01); camera=new THREE.PerspectiveCamera(42,window.innerWidth/window.innerHeight,0.1,1000); camera.position.set(0,2,CONFIG.camera.z); renderer=new THREE.WebGLRenderer({antialias:!IS_MOBILE,alpha:false,powerPreference:"high-performance"}); renderer.setSize(window.innerWidth,window.innerHeight); renderer.setPixelRatio(Math.min(window.devicePixelRatio,IS_MOBILE?1.6:2)); renderer.toneMapping=THREE.ReinhardToneMapping; renderer.toneMappingExposure=2.2; c.appendChild(renderer.domElement); mainGroup=new THREE.Group(); scene.add(mainGroup); }
         function setupEnvironment() { const p=new THREE.PMREMGenerator(renderer); scene.environment=p.fromScene(new RoomEnvironment(),0.04).texture; }
         function setupLights() { scene.add(new THREE.AmbientLight(0xffffff,0.6)); const i=new THREE.PointLight(0xffaa00,2,20); i.position.set(0,5,0); mainGroup.add(i); const s1=new THREE.SpotLight(0xffcc66,1200); s1.position.set(30,40,40); s1.angle=0.5; s1.penumbra=0.5; scene.add(s1); const s2=new THREE.SpotLight(0x6688ff,600); s2.position.set(-30,20,-30); scene.add(s2); const f=new THREE.DirectionalLight(0xffeebb,0.8); f.position.set(0,0,50); scene.add(f); }
-        function setupPostProcessing() { const r=new RenderPass(scene,camera); const b=new UnrealBloomPass(new THREE.Vector2(window.innerWidth,window.innerHeight),1.5,0.4,0.85); b.threshold=0.7; b.strength=IS_MOBILE?0.36:0.45; b.radius=IS_MOBILE?0.32:0.4; composer=new EffectComposer(renderer); composer.addPass(r); composer.addPass(b); }
+        function setupPostProcessing() { const r=new RenderPass(scene,camera); const b=new UnrealBloomPass(new THREE.Vector2(window.innerWidth,window.innerHeight),1.5,0.4,0.85); b.threshold=0.86; b.strength=IS_MOBILE?0.42:0.55; b.radius=IS_MOBILE?0.32:0.4; composer=new EffectComposer(renderer); composer.addPass(r); composer.addPass(b); }
         function createTextures() { const c=document.createElement('canvas'); c.width=128; c.height=128; const x=c.getContext('2d'); x.fillStyle='#ffffff'; x.fillRect(0,0,128,128); x.fillStyle='#880000'; x.beginPath(); for(let i=-128;i<256;i+=32){x.moveTo(i,0);x.lineTo(i+32,128);x.lineTo(i+16,128);x.lineTo(i-16,0);} x.fill(); caneTexture=new THREE.CanvasTexture(c); caneTexture.wrapS=caneTexture.wrapT=THREE.RepeatWrapping; caneTexture.repeat.set(3,3); }
 
         window.updateSnowSettings=()=> { CONFIG.snow.sizeBase=parseFloat(document.getElementById('slider-snow-size').value); CONFIG.snow.count=parseInt(document.getElementById('slider-snow-count').value); createSnow(); };
@@ -400,31 +413,139 @@ window.addEventListener('keydown', (e) => {
         }
         function createDust(){const g=new THREE.TetrahedronGeometry(0.08,0);const m=new THREE.MeshBasicMaterial({color:0xffeebb,transparent:true,opacity:0.8});for(let i=0;i<CONFIG.particles.dustCount;i++){const ms=new THREE.Mesh(g,m);ms.scale.setScalar(0.5+Math.random());mainGroup.add(ms);particleSystem.push(new Particle(ms,'DUST',true));}}
         function createDefaultPhotos(){const c=document.createElement('canvas');c.width=512;c.height=512;const x=c.getContext('2d');x.fillStyle='#050505';x.fillRect(0,0,512,512);x.strokeStyle='#eebb66';x.lineWidth=15;x.strokeRect(20,20,472,472);x.font='500 60px Times New Roman';x.fillStyle='#eebb66';x.textAlign='center';x.fillText("JOYEUX",256,230);x.fillText("NOEL",256,300);createPhotoTexture(c.toDataURL(),'default');}
-        function createPhotoTexture(b,id){const i=new Image();i.src=b;i.onload=()=>{const t=new THREE.Texture(i);t.colorSpace=THREE.SRGBColorSpace;t.needsUpdate=true;addPhotoToScene(t,id,i);}}
+        function createPhotoTexture(b,id){
+            const img=new Image();
+            img.decoding='async';
+            img.onload=()=>{
+                try{
+                    // 统一在 sRGB 画布里重采样：把 P3 / 带 ICC 的图、超大图、非 RGB 的图都规整成 sRGB 像素，
+                    // 再交给 WebGL，避免不同来源图片出现偏色 / 过饱和 / 发灰。
+                    const MAX=1024;
+                    const ow=img.naturalWidth||img.width||1, oh=img.naturalHeight||img.height||1;
+                    const k=Math.min(1, MAX/Math.max(ow,oh));
+                    const w=Math.max(2,Math.round(ow*k)), h=Math.max(2,Math.round(oh*k));
+                    const cv=document.createElement('canvas'); cv.width=w; cv.height=h;
+                    const cx=cv.getContext('2d',{colorSpace:'srgb',alpha:false,imageSmoothingQuality:'high'});
+                    cx.imageSmoothingEnabled=true; cx.imageSmoothingQuality='high';
+                    cx.fillStyle='#000'; cx.fillRect(0,0,w,h);
+                    cx.drawImage(img,0,0,w,h);
+                    const t=new THREE.CanvasTexture(cv);
+                    t.colorSpace=THREE.SRGBColorSpace;
+                    t.magFilter=THREE.LinearFilter;
+                    t.minFilter=THREE.LinearMipmapLinearFilter;
+                    t.generateMipmaps=true;
+                    t.anisotropy=Math.min(8, renderer&&renderer.capabilities?renderer.capabilities.getMaxAnisotropy():1);
+                    t.needsUpdate=true;
+                    addPhotoToScene(t,id,{width:w,height:h});
+                }catch(e){
+                    console.warn('photo bake failed, fallback to raw texture',e);
+                    const t=new THREE.Texture(img); t.colorSpace=THREE.SRGBColorSpace; t.needsUpdate=true; addPhotoToScene(t,id,img);
+                }
+            };
+            img.onerror=()=>console.warn('photo decode failed',id);
+            img.src=b;
+        }
         function addPhotoToScene(t,id,imgObj){
             const aspect=imgObj.width/imgObj.height; let w=1.2,h=1.2; if(aspect>1)h=w/aspect; else w=h*aspect;
-            const fg=new THREE.BoxGeometry(w+0.2,h+0.2,0.05); const fm=new THREE.MeshStandardMaterial({color:0xc5a059,metalness:0.6,roughness:0.5,envMapIntensity:0.5}); const f=new THREE.Mesh(fg,fm); const pg=new THREE.PlaneGeometry(w,h); const pm=new THREE.MeshBasicMaterial({map:t}); const p=new THREE.Mesh(pg,pm); p.position.z=0.04; const g=new THREE.Group(); g.add(f); g.add(p); const s=0.8; g.scale.set(s,s,s); photoMeshGroup.add(g); const pt=new Particle(g,'PHOTO',false); pt.photoId=id; pt.texture=t; particleSystem.push(pt);
+            const fg=new THREE.BoxGeometry(w+0.2,h+0.2,0.05); const fm=new THREE.MeshStandardMaterial({color:0xbfa06a,metalness:0.35,roughness:0.6,envMapIntensity:0.35,toneMapped:true}); const f=new THREE.Mesh(fg,fm); const pg=new THREE.PlaneGeometry(w,h); const pm=new THREE.MeshBasicMaterial({map:t,toneMapped:false}); pm.color.setRGB(0.85,0.85,0.85); const p=new THREE.Mesh(pg,pm); p.position.z=0.04; const g=new THREE.Group(); g.add(f); g.add(p); const s=0.8; g.scale.set(s,s,s); photoMeshGroup.add(g); const pt=new Particle(g,'PHOTO',false); pt.photoId=id; pt.texture=t; particleSystem.push(pt);
         }
         window.applyParticleSettings=()=>{const ph=particleSystem.filter(p=>p.type==='PHOTO');const tr=[];mainGroup.children.forEach(c=>{if(c!==photoMeshGroup)tr.push(c)});tr.forEach(c=>mainGroup.remove(c));particleSystem=[...ph];CONFIG.particles.count=parseInt(document.getElementById('slider-tree').value);CONFIG.particles.dustCount=parseInt(document.getElementById('slider-dust').value);createParticles();createDust();createSnow();};
 
-        async function initMediaPipe(){
-            videoElement=document.getElementById('webcam-video');
-            if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
-                try{
-                    const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480},frameRate:{ideal:30}},audio:false});
-                    videoElement.srcObject=s; videoElement.onloadedmetadata=()=>{videoElement.play().catch(()=>{});renderWebcamPreview();};
-                }catch(e){console.warn('camera unavailable',e);}
+        // ---------- 摄像头 / 手势：带可见状态与重试 ----------
+        let CAM_STATE = 'idle', camStream = null, camStarting = false;
+
+        function camHint() {
+            switch (CAM_STATE) {
+                case 'live': return STATE.hand.detected ? ' · 手势识别中' : ' · 等待手势（20-30cm）';
+                case 'requesting': return ' · 摄像头连接中…';
+                case 'denied': return ' · 摄像头权限被拒：点『重试』';
+                case 'busy': return ' · 摄像头被其他页面占用：关掉后用『重试』';
+                case 'no-device': return ' · 没找到摄像头';
+                case 'ended': return ' · 摄像头已断开：点『重试』';
+                case 'error': return ' · 摄像头异常：点『重试』';
+                default: return '';
             }
-            try{
-                const v=await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm");
-                const opts=(delegate)=>({baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",delegate:delegate},runningMode:"VIDEO",numHands:1});
-                try{handLandmarker=await HandLandmarker.createFromOptions(v,opts("GPU"));}
-                catch(errGPU){console.warn('GPU delegate failed, retry CPU',errGPU);handLandmarker=await HandLandmarker.createFromOptions(v,opts("CPU"));}
-                predictWebcam();
-            }catch(e){console.warn(e);}
         }
+
+        function setCamState(state, detail) {
+            CAM_STATE = state;
+            window.CAM_STATE = state;
+            const dot = document.getElementById('cam-status');
+            if (dot) {
+                dot.classList.toggle('active', state === 'live');
+                const c = state === 'live' ? '#00ff00' : (state === 'requesting' ? '#ffcc00' : '#ff3333');
+                dot.style.background = c;
+                dot.style.boxShadow = '0 0 6px ' + c;
+            }
+            const names = { idle: '摄像头未启动', requesting: '摄像头连接中…', live: '摄像头已连接', denied: '权限被拒',
+                            busy: '被其他页面占用', 'no-device': '未找到摄像头', ended: '摄像头已断开', error: '摄像头异常' };
+            const msg = document.getElementById('cam-msg');
+            if (msg) msg.innerText = detail ? ((names[state] || state) + '：' + detail) : (names[state] || state);
+            const btn = document.getElementById('cam-retry');
+            if (btn) btn.classList.toggle('show', state !== 'live' && state !== 'requesting');
+            refreshHint();
+        }
+
+        async function startCamera() {
+            if (camStarting) return false;
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { setCamState('no-device'); return false; }
+            camStarting = true;
+            try {
+                if (camStream) { camStream.getTracks().forEach(t => { try { t.stop(); } catch (e) {} }); camStream = null; }
+                setCamState('requesting');
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 }, frameRate: { ideal: 30 } },
+                    audio: false
+                });
+                camStream = stream;
+                videoElement = document.getElementById('webcam-video');
+                videoElement.srcObject = stream;
+                await videoElement.play().catch(() => {});
+                renderWebcamPreview();
+                const track = stream.getVideoTracks()[0];
+                if (track) track.addEventListener('ended', () => setCamState('ended'));
+                setCamState('live');
+                return true;
+            } catch (e) {
+                const n = (e && e.name) || '';
+                if (n === 'NotAllowedError' || n === 'SecurityError' || n === 'PermissionDeniedError') {
+                    setCamState('denied', '在地址栏摄像头图标里允许');
+                } else if (n === 'NotReadableError' || n === 'TrackStartError' || n === 'AbortError') {
+                    setCamState('busy', '关掉其他占用摄像头的标签页');
+                    setTimeout(() => { if (CAM_STATE === 'busy') startCamera(); }, 4000);
+                } else if (n === 'NotFoundError' || n === 'DevicesNotFoundError' || n === 'OverconstrainedError') {
+                    setCamState('no-device');
+                } else {
+                    setCamState('error', n || String(e));
+                }
+                console.warn('camera unavailable', e);
+                return false;
+            } finally {
+                camStarting = false;
+            }
+        }
+
+        async function initMediaPipe() {
+            await startCamera();
+            try {
+                const v = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm");
+                const opts = (delegate) => ({ baseOptions: { modelAssetPath: "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task", delegate: delegate }, runningMode: "VIDEO", numHands: 1 });
+                try { handLandmarker = await HandLandmarker.createFromOptions(v, opts("GPU")); }
+                catch (errGPU) { console.warn('GPU delegate failed, retry CPU', errGPU); handLandmarker = await HandLandmarker.createFromOptions(v, opts("CPU")); }
+                predictWebcam();
+            } catch (e) { console.warn('hand model failed', e); }
+        }
+
+        (function bindCamRetry() {
+            const b = document.getElementById('cam-retry');
+            if (b) b.addEventListener('click', () => { if (handLandmarker) startCamera(); else initMediaPipe(); });
+        })();
+
+        window.addEventListener('pagehide', () => {
+            if (camStream) camStream.getTracks().forEach(t => { try { t.stop(); } catch (e) {} });
+        });
         function renderWebcamPreview(){const c=document.getElementById('webcam-canvas'),x=c.getContext('2d',{willReadFrequently:true});function d(){if(videoElement.readyState>=2)x.drawImage(videoElement,0,0,c.width,c.height);requestAnimationFrame(d)}d()}
-        let lvt=-1,lastDetect=0;async function predictWebcam(){if(videoElement&&handLandmarker&&videoElement.readyState>=2&&videoElement.currentTime!==lvt){const now=performance.now();if(now-lastDetect>=(IS_MOBILE?70:33)){lastDetect=now;lvt=videoElement.currentTime;try{const r=handLandmarker.detectForVideo(videoElement,now);processGestures(r);document.getElementById('cam-status').classList.toggle('active',r.landmarks.length>0);}catch(e){console.warn(e);}}}requestAnimationFrame(predictWebcam);}
+        let lvt=-1,lastDetect=0;async function predictWebcam(){if(videoElement&&handLandmarker&&videoElement.readyState>=2&&videoElement.currentTime!==lvt){const now=performance.now();if(now-lastDetect>=(IS_MOBILE?70:33)){lastDetect=now;lvt=videoElement.currentTime;try{const r=handLandmarker.detectForVideo(videoElement,now);processGestures(r);refreshHint();document.getElementById('cam-status').classList.toggle('active',r.landmarks.length>0);}catch(e){console.warn(e);}}}requestAnimationFrame(predictWebcam);}
         function processGestures(r){if(r.landmarks&&r.landmarks.length>0){STATE.hand.detected=true;const lm=r.landmarks[0];STATE.hand.x=(lm[9].x-0.5)*2;STATE.hand.y=(lm[9].y-0.5)*2;const thumb=lm[4],index=lm[8],wrist=lm[0],middle=lm[12];const pd=Math.hypot(thumb.x-index.x,thumb.y-index.y);const od=Math.hypot(middle.x-wrist.x,middle.y-wrist.y);if(STATE.mode==='FOCUS'){if(pd>0.1)setMode('SCATTER');return;}if(pd<0.05&&STATE.mode!=='FOCUS')triggerPhotoGrab();else if(od>0.4)setMode('SCATTER');else if(od<0.2)setMode('TREE');}else STATE.hand.detected=false;}
 
         window.setupEvents=()=>{

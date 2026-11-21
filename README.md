@@ -45,6 +45,25 @@ start http://127.0.0.1:8123/index.html
 - 手势需要摄像头权限（距离 20–30cm、手倾斜约 45°、光线充足）。
 - 键盘：`空格` 聚合 / `Z` 散开 / `X` 抓照片 / 方向键旋转；鼠标拖标题、滑块调密度与雪花。
 
+## 照片色彩修复（v17.6.5-c）
+
+**症状**：上传的照片人脸发白、白衣服糊成一片、整体发灰发粉（原版把照片和整个画面一起过了 bloom + Reinhard）。
+
+**原因**：照片用 `MeshBasicMaterial` 但 `toneMapped` 默认 true，会吃 `ReinhardToneMapping + exposure 2.2`；
+再加上 bloom 阈值只有 0.7，照片里的亮部直接进泛光，双重推爆高光。
+
+**改法**：
+
+1. 解码统一走 sRGB 画布：`<img>` → 2D canvas（`colorSpace:'srgb'`，最长边缩到 1024）→ `CanvasTexture`；
+   P3 / 带 ICC / 超大图先规整成 sRGB 像素再进 WebGL，避免不同来源图片偏色。
+2. 照片材质 `toneMapped = false`，色调映射不再作用于照片。
+3. 照片线性增益 0.85（`pm.color.setRGB(0.85,0.85,0.85)`），峰值压到 bloom 阈值以下。
+4. bloom 阈值 0.7 → 0.86、强度 0.45 → 0.55：只有金饰高光继续发光，照片不再被泛光糊掉。
+5. 纹理 8x 各向异性 + mipmap，斜视也清晰。
+
+**效果**（同一张 2048×2048 照片、聚焦态）：高光裁切像素 13.9% → 0.9%，
+对比图见 `shots/photo_color_before.png` / `shots/photo_color_after.png`，场景内效果 `shots/photo_in_scene_after.png`。
+
 ## 手机端改造（v17.6.5-m）
 
 同一个 `index.html`，桌面/手机自适应，**手机上直接开网址就能用**：
