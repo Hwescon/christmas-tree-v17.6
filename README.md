@@ -82,3 +82,4 @@ start http://127.0.0.1:8123/index.html
 - `shots/tablet_portrait.png` —— 平板竖屏
 - `shots/mobile_sheet.png` —— 手机端设置抽屉展开
 - `shots/mobile_focus.png` —— 手机端散开态
+- `shots/mobile_live_pages.png` —— 手机直接访问 GitHub Pages 线上版
