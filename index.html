@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Grand Luxury Tree v17.6.5 - UI Hints</title><style>/* ================= 1. 基础设置 ================= */body { margin: 0; overflow: hidden; background-color: #050505; font-family: 'Microsoft YaHei', 'Songti SC', serif; }
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"><meta name="theme-color" content="#050505"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="format-detection" content="telephone=no"><title>Grand Luxury Tree v17.6.5 - UI Hints</title><style>/* ================= 1. 基础设置 ================= */body { margin: 0; overflow: hidden; background-color: #050505; font-family: 'Microsoft YaHei', 'Songti SC', serif; }
         #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; }
         
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Great+Vibes&family=Monoton&family=Abril+Fatface&family=Ma+Shan+Zheng&display=swap');
@@ -105,10 +105,84 @@
         .loader-text { color: #d4af37; font-size: 12px; letter-spacing: 4px; margin-top: 25px; font-family: 'Cinzel', serif; opacity: 0.8; }
         
         #gesture-hint { position: absolute; bottom: 10px; width: 100%; text-align: center; color: rgba(212,175,55,0.7); font-size: 10px; pointer-events: none; text-shadow: 0 0 5px #000; z-index: 5; }
+
+        /* ================= 3. 移动端适配 (v17.6.5-m) ================= */
+        #mobile-bar { display: none; }
+        @media (max-width: 760px), (hover: none) and (pointer: coarse) {
+            :root { --ui-scale: 1; }
+            html, body { overscroll-behavior: none; -webkit-tap-highlight-color: transparent; }
+            body { -webkit-user-select: none; user-select: none; }
+            #canvas-container { height: 100vh; height: 100dvh; touch-action: none; }
+            #title-container { top: 12%; padding: 6px; cursor: default; }
+            .title-line { white-space: normal; }
+
+            #top-right-controls { top: calc(6px + env(safe-area-inset-top)); right: 6px; gap: 6px; }
+            #top-right-controls .elegant-btn { font-size: 11px !important; min-height: 34px; padding: 4px 10px !important; }
+
+            #left-sidebar {
+                position: fixed; left: 6px; right: 6px; bottom: calc(74px + env(safe-area-inset-bottom)); top: auto;
+                width: auto; height: auto; box-sizing: border-box; max-height: 58vh; max-height: 58dvh; overflow-y: auto;
+                -webkit-overflow-scrolling: touch; transform: none; transform-origin: bottom center;
+                pointer-events: auto; padding: 8px 8px calc(78px + env(safe-area-inset-bottom)); border-radius: 16px;
+                background: rgba(10,10,14,0.95); border: 1px solid rgba(255,255,255,0.10);
+                box-shadow: 0 12px 40px rgba(0,0,0,0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+                transition: transform .35s cubic-bezier(.4,0,.2,1), opacity .35s; z-index: 40;
+            }
+            #left-sidebar > .glass-panel, #left-sidebar > .top-left-panel {
+                background: transparent !important; border: none !important; box-shadow: none !important;
+                backdrop-filter: none !important; -webkit-backdrop-filter: none !important; padding: 6px; overflow: visible !important;
+            }
+            #left-sidebar.panel-hidden { transform: translateY(calc(100% + 110px)) !important; opacity: 0 !important; pointer-events: none !important; }
+            .bottom-left-panel { position: static !important; width: 100% !important; transform: none !important; margin-top: 6px; padding: 8px; }
+            .bottom-left-panel .elegant-btn { min-height: 40px; font-size: 12px !important; }
+
+            .elegant-btn { min-height: 38px; font-size: 12px; }
+            .dir-btn { min-height: 44px; font-size: 15px; padding: 0; line-height: 44px; }
+            input[type=range] { height: 28px; }
+            input[type=range]::-webkit-slider-thumb { height: 18px; width: 18px; margin-top: -9px; }
+            .input-glass, select.input-glass, input[type=text] { font-size: 16px !important; height: 38px; }
+            .ui-title-sub { font-size: 12px; }
+            .particle-scroll-container { max-height: 170px; }
+
+            #gesture-hint { bottom: calc(70px + env(safe-area-inset-bottom)); font-size: 11px; }
+            #webcam-wrapper { top: calc(6px + env(safe-area-inset-top)); left: 6px; right: auto; bottom: auto; width: 96px; height: 72px; }
+            #photo-grid { width: 92% !important; }
+
+            #mobile-bar {
+                display: flex; position: fixed; left: 6px; right: 6px; bottom: calc(6px + env(safe-area-inset-bottom));
+                gap: 6px; z-index: 60;
+            }
+            .mbtn {
+                flex: 1 1 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+                height: 58px; border-radius: 12px; border: 1px solid rgba(212,175,55,0.35);
+                background: rgba(18,18,24,0.82); color: #f1d78a; font-size: 11px; letter-spacing: 1px;
+                backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 0; font-family: inherit;
+            }
+            .mbtn b { font-size: 19px; font-weight: 400; line-height: 1; }
+            .mbtn:active { background: rgba(212,175,55,0.24); color: #fff; }
+            #mobile-bar.hidden { display: none !important; }
+        }
+        @media (max-width: 900px) and (max-height: 460px) {
+            #left-sidebar { max-height: 84vh; max-height: 84dvh; }
+        }
+        @media (hover: none) and (pointer: coarse) and (max-height: 460px) {
+            .mbtn { height: 44px; font-size: 10px; letter-spacing: 0; }
+            .mbtn b { font-size: 15px; }
+            #gesture-hint { display: none; }
+            #left-sidebar { bottom: calc(52px + env(safe-area-inset-bottom)); max-height: 78vh; max-height: 78dvh; }
+            #webcam-wrapper { width: 78px; height: 58px; }
+            #title-container { top: 4%; }
+        }
     </style><script type="importmap">
         { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/", "@mediapipe/tasks-vision": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/+esm" } }
     </script></head><body><div id="loader"><div class="spinner"></div><div class="loader-text">SYSTEM INITIALIZING</div></div><div id="canvas-container"></div><div id="title-container"><h1 id="display-line1" class="title-line">Merry</h1><h1 id="display-line2" class="title-line">Christmas</h1></div><div id="ui-layer"><div id="top-right-controls"><button class="elegant-btn glass-panel" id="fs-btn" onclick="toggleFullScreen()" style="padding: 6px 12px;">⛶ 全屏显示</button><button class="elegant-btn glass-panel" id="toggle-ui-btn" onclick="toggleUI()" style="padding: 6px 12px;">👁 隐藏界面</button></div><div id="left-sidebar"><div class="top-left-panel glass-panel"><div class="ui-title-main">场景定制</div> 
-                <div class="ui-title-sub">祝福语录</div><div class="control-row"><input type="text" id="input-line1" class="input-glass" placeholder="第一行文字" oninput="updateTextConfig()"><input type="text" id="input-line2" class="input-glass" placeholder="第二行文字" oninput="updateTextConfig()" style="margin-top:2px;"></div><div class="ui-title-sub">字体风格</div><select id="font-select" class="input-glass" onchange="updateTextConfig()"><option value="style1">书法韵味</option><option value="style2">古典衬线</option><option value="style3">优雅手写</option><option value="style4">艺术线条</option><option value="style5">复古重磅</option></select><div class="control-row"><div class="ui-title-sub" style="margin-top:6px;">大小 & 颜色</div><div style="display:flex; gap:8px; align-items:center;"><input type="range" min="50" max="250" value="100" id="slider-fontsize" oninput="updateTextConfig()"><input type="color" id="color-picker" value="#fceea7" oninput="updateTextConfig()" style="width:30px; height:20px; border:none;"></div></div><div class="ui-title-sub" style="border-top:1px solid rgba(255,255,255,0.05); padding-top:6px; margin-top:6px;">背景音乐</div><div style="display:flex; gap:8px; margin-bottom:4px;"><button class="elegant-btn" onclick="toggleMusicPlay()" id="play-btn" style="flex:2; font-size:14px;">⏯</button><button class="elegant-btn" onclick="replayMusic()" style="flex:1; font-size:14px;">⟲</button></div><div class="control-row"><span class="control-label" style="text-align:center;">音量调节</span><input type="range" min="0" max="100" value="50" id="slider-volume" oninput="updateVolume(this.value)"></div><div class="ui-title-sub" style="border-top:1px solid rgba(255,255,255,0.05); padding-top:6px; margin-top:6px;">粒子控制</div><div class="particle-scroll-container"><div class="control-row"><span class="control-label">装饰密度 (树)</span><input type="range" min="500" max="3000" value="1500" id="slider-tree"></div><div class="control-row"><span class="control-label">星尘密度 (背景)</span><input type="range" min="500" max="5000" value="2500" id="slider-dust"></div><div class="control-row"><span class="control-label">雪花数量</span><input type="range" min="0" max="3000" step="100" value="1500" id="slider-snow-count" onchange="updateSnowSettings()"></div><div class="control-row"><span class="control-label">雪花大小</span><input type="range" min="0.05" max="0.3" step="0.01" value="0.12" id="slider-snow-size" onchange="updateSnowSettings()"></div><div class="control-row"><span class="control-label">下落速度</span><input type="range" min="1.0" max="8.0" step="0.5" value="3.5" id="slider-snow-speed" oninput="updateSnowSpeed(this.value)"></div></div><button class="elegant-btn" style="width:100%; margin-top:8px;" onclick="applyParticleSettings()">⚡ 重置场景</button></div><div class="top-left-panel glass-panel"><div class="ui-title-main">交互中控</div><div class="ui-title-sub">形态切换</div><div class="interaction-grid"><button class="elegant-btn" style="flex:1;" onclick="setMode('TREE')">聚合 (Space)</button><button class="elegant-btn" style="flex:1;" onclick="setMode('SCATTER')">散开 (Z)</button></div><button class="elegant-btn" style="width:100%;" onclick="triggerPhotoGrab()">抓取照片 (X)</button><div class="control-row" style="margin-top:8px;"><span class="control-label">旋转速度 (散开)</span><input type="range" min="0.1" max="5.0" step="0.1" value="1.4" oninput="updateRotationSpeed(this.value)"></div><div class="direction-pad"><div></div><div class="dir-btn" onmousedown="startRotate('up')" onmouseup="stopRotate()" onmouseleave="stopRotate()">▲</div><div></div><div class="dir-btn" onmousedown="startRotate('left')" onmouseup="stopRotate()" onmouseleave="stopRotate()">◀</div><div class="dir-btn" onclick="resetRotation()" style="font-size:10px;">●</div><div class="dir-btn" onmousedown="startRotate('right')" onmouseup="stopRotate()" onmouseleave="stopRotate()">▶</div><div></div><div class="dir-btn" onmousedown="startRotate('down')" onmouseup="stopRotate()" onmouseleave="stopRotate()">▼</div><div></div></div></div></div><div class="bottom-left-panel glass-panel"><div class="ui-title-main" style="font-size:12px; margin-bottom:5px;">资源管理</div><label class="elegant-btn"> + 上传照片 <input type="file" id="file-input" multiple accept="image/*"> </label><button class="elegant-btn" onclick="openDeleteManager()">▣ 管理照片</button><label class="elegant-btn" id="music-upload-label"> ♫ 背景音乐 <input type="file" id="music-input" accept=".mp3,audio/mpeg"> </label><button class="elegant-btn" id="toggle-cam-btn" onclick="toggleCameraDisplay()">📷 隐藏画面</button></div></div><div id="gesture-hint">正在初始化系统...</div><div id="webcam-wrapper"><canvas id="webcam-canvas" width="320" height="240"></canvas><div id="cam-status"></div></div><video id="webcam-video" autoplay playsinline muted style="display:none"></video><div id="delete-manager" class="hidden"><div class="manager-title">照片库管理</div><div id="photo-grid"></div><div class="manager-actions"><button class="elegant-btn btn-red glass-panel" onclick="clearAllPhotos()" style="padding: 8px 20px;">清空所有</button><button class="elegant-btn glass-panel" onclick="closeDeleteManager()" style="padding: 8px 20px;">关闭</button></div></div><script type="module">import * as THREE from 'three';
+                <div class="ui-title-sub">祝福语录</div><div class="control-row"><input type="text" id="input-line1" class="input-glass" placeholder="第一行文字" oninput="updateTextConfig()"><input type="text" id="input-line2" class="input-glass" placeholder="第二行文字" oninput="updateTextConfig()" style="margin-top:2px;"></div><div class="ui-title-sub">字体风格</div><select id="font-select" class="input-glass" onchange="updateTextConfig()"><option value="style1">书法韵味</option><option value="style2">古典衬线</option><option value="style3">优雅手写</option><option value="style4">艺术线条</option><option value="style5">复古重磅</option></select><div class="control-row"><div class="ui-title-sub" style="margin-top:6px;">大小 & 颜色</div><div style="display:flex; gap:8px; align-items:center;"><input type="range" min="50" max="250" value="100" id="slider-fontsize" oninput="updateTextConfig()"><input type="color" id="color-picker" value="#fceea7" oninput="updateTextConfig()" style="width:30px; height:20px; border:none;"></div></div><div class="ui-title-sub" style="border-top:1px solid rgba(255,255,255,0.05); padding-top:6px; margin-top:6px;">背景音乐</div><div style="display:flex; gap:8px; margin-bottom:4px;"><button class="elegant-btn" onclick="toggleMusicPlay()" id="play-btn" style="flex:2; font-size:14px;">⏯</button><button class="elegant-btn" onclick="replayMusic()" style="flex:1; font-size:14px;">⟲</button></div><div class="control-row"><span class="control-label" style="text-align:center;">音量调节</span><input type="range" min="0" max="100" value="50" id="slider-volume" oninput="updateVolume(this.value)"></div><div class="ui-title-sub" style="border-top:1px solid rgba(255,255,255,0.05); padding-top:6px; margin-top:6px;">粒子控制</div><div class="particle-scroll-container"><div class="control-row"><span class="control-label">装饰密度 (树)</span><input type="range" min="500" max="3000" value="1500" id="slider-tree"></div><div class="control-row"><span class="control-label">星尘密度 (背景)</span><input type="range" min="500" max="5000" value="2500" id="slider-dust"></div><div class="control-row"><span class="control-label">雪花数量</span><input type="range" min="0" max="3000" step="100" value="1500" id="slider-snow-count" onchange="updateSnowSettings()"></div><div class="control-row"><span class="control-label">雪花大小</span><input type="range" min="0.05" max="0.3" step="0.01" value="0.12" id="slider-snow-size" onchange="updateSnowSettings()"></div><div class="control-row"><span class="control-label">下落速度</span><input type="range" min="1.0" max="8.0" step="0.5" value="3.5" id="slider-snow-speed" oninput="updateSnowSpeed(this.value)"></div></div><button class="elegant-btn" style="width:100%; margin-top:8px;" onclick="applyParticleSettings()">⚡ 重置场景</button></div><div class="top-left-panel glass-panel"><div class="ui-title-main">交互中控</div><div class="ui-title-sub">形态切换</div><div class="interaction-grid"><button class="elegant-btn" style="flex:1;" onclick="setMode('TREE')">聚合 (Space)</button><button class="elegant-btn" style="flex:1;" onclick="setMode('SCATTER')">散开 (Z)</button></div><button class="elegant-btn" style="width:100%;" onclick="triggerPhotoGrab()">抓取照片 (X)</button><div class="control-row" style="margin-top:8px;"><span class="control-label">旋转速度 (散开)</span><input type="range" min="0.1" max="5.0" step="0.1" value="1.4" oninput="updateRotationSpeed(this.value)"></div><div class="direction-pad"><div></div><div class="dir-btn" onmousedown="startRotate('up')" onmouseup="stopRotate()" onmouseleave="stopRotate()">▲</div><div></div><div class="dir-btn" onmousedown="startRotate('left')" onmouseup="stopRotate()" onmouseleave="stopRotate()">◀</div><div class="dir-btn" onclick="resetRotation()" style="font-size:10px;">●</div><div class="dir-btn" onmousedown="startRotate('right')" onmouseup="stopRotate()" onmouseleave="stopRotate()">▶</div><div></div><div class="dir-btn" onmousedown="startRotate('down')" onmouseup="stopRotate()" onmouseleave="stopRotate()">▼</div><div></div></div></div></div><div class="bottom-left-panel glass-panel"><div class="ui-title-main" style="font-size:12px; margin-bottom:5px;">资源管理</div><label class="elegant-btn"> + 上传照片 <input type="file" id="file-input" multiple accept="image/*"> </label><button class="elegant-btn" onclick="openDeleteManager()">▣ 管理照片</button><label class="elegant-btn" id="music-upload-label"> ♫ 背景音乐 <input type="file" id="music-input" accept=".mp3,audio/mpeg"> </label><button class="elegant-btn" id="toggle-cam-btn" onclick="toggleCameraDisplay()">📷 隐藏画面</button></div></div><div id="gesture-hint">正在初始化系统...</div><div id="webcam-wrapper"><canvas id="webcam-canvas" width="320" height="240"></canvas><div id="cam-status"></div></div><video id="webcam-video" autoplay playsinline muted style="display:none"></video><div id="delete-manager" class="hidden"><div class="manager-title">照片库管理</div><div id="photo-grid"></div><div class="manager-actions"><button class="elegant-btn btn-red glass-panel" onclick="clearAllPhotos()" style="padding: 8px 20px;">清空所有</button><button class="elegant-btn glass-panel" onclick="closeDeleteManager()" style="padding: 8px 20px;">关闭</button></div></div><div id="mobile-bar">
+            <button class="mbtn" id="mb-tree"><b>🎄</b><span>聚合</span></button>
+            <button class="mbtn" id="mb-scatter"><b>✨</b><span>散开</span></button>
+            <button class="mbtn" id="mb-grab"><b>🖼</b><span>抓图</span></button>
+            <button class="mbtn" id="mb-cam"><b>📷</b><span>镜头</span></button>
+            <button class="mbtn" id="mb-settings"><b>⚙</b><span>设置</span></button>
+        </div><script type="module">import * as THREE from 'three';
         import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
         import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
         import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -172,13 +246,13 @@ const DB_NAME = "GrandTreeDB_v17_Clean";
             setMode('TREE');
         }
 
-        function initDraggableTitle() { const t=document.getElementById('title-container'); let d=false,o={x:0,y:0}; t.onmousedown=e=>{d=true;const r=t.getBoundingClientRect();o.x=e.clientX-r.left;o.y=e.clientY-r.top;t.style.transform='none';t.style.left=r.left+'px';t.style.top=r.top+'px'}; window.onmousemove=e=>{if(d){t.style.left=(e.clientX-o.x)+'px';t.style.top=(e.clientY-o.y)+'px'}}; window.onmouseup=()=>d=false; }
+        function initDraggableTitle(){const t=document.getElementById('title-container');let d=false,ox=0,oy=0;const start=e=>{const r=t.getBoundingClientRect();d=true;ox=e.clientX-r.left;oy=e.clientY-r.top;t.style.transform='none';t.style.left=r.left+'px';t.style.top=r.top+'px';};const move=e=>{if(!d)return;const w=window.innerWidth,h=window.innerHeight;t.style.left=Math.max(-30,Math.min(w-60,Math.round(e.clientX-ox)))+'px';t.style.top=Math.max(0,Math.min(h-70,Math.round(e.clientY-oy)))+'px';};t.addEventListener('pointerdown',e=>{try{t.setPointerCapture(e.pointerId)}catch(_){};start(e);});t.addEventListener('pointermove',move);['pointerup','pointercancel','pointerleave'].forEach(n=>t.addEventListener(n,()=>{d=false;}));}
         window.toggleUI=()=> { STATE.uiVisible=!STATE.uiVisible; document.getElementById('left-sidebar').classList.toggle('panel-hidden', !STATE.uiVisible); document.querySelector('.bottom-left-panel').classList.toggle('panel-hidden', !STATE.uiVisible); };
         window.toggleCameraDisplay=()=> { STATE.cameraVisible=!STATE.cameraVisible; document.getElementById('webcam-wrapper').classList.toggle('camera-hidden', !STATE.cameraVisible); };
         window.toggleFullScreen=()=> { if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen(); };
         function loadTextConfig() { const s=JSON.parse(localStorage.getItem('v16_text_config')); if(s){ document.getElementById('input-line1').value=s.line1||""; document.getElementById('input-line2').value=s.line2||""; document.getElementById('font-select').value=s.fontKey||"style1"; document.getElementById('slider-fontsize').value=s.size||100; document.getElementById('color-picker').value=s.color||"#fceea7"; applyTextConfig(s.fontKey,s.line1,s.line2,s.size,s.color); } else { document.getElementById('input-line1').value="Merry"; document.getElementById('input-line2').value="Christmas"; applyTextConfig("style1","Merry","Christmas",100,"#fceea7"); } }
         window.updateTextConfig=()=> { const k=document.getElementById('font-select').value, l1=document.getElementById('input-line1').value, l2=document.getElementById('input-line2').value, s=document.getElementById('slider-fontsize').value, c=document.getElementById('color-picker').value; localStorage.setItem('v16_text_config',JSON.stringify({fontKey:k,line1:l1,line2:l2,size:s,color:c})); applyTextConfig(k,l1,l2,s,c); };
-        function applyTextConfig(k,l1,l2,s,c) { const st=FONT_STYLES[k]||FONT_STYLES['style1']; const t1=document.getElementById('display-line1'), t2=document.getElementById('display-line2'), ct=document.getElementById('title-container'); ct.style.fontFamily=st.font; t1.innerText=l1; t2.innerText=l2; t1.style.letterSpacing=st.spacing; t2.style.letterSpacing=st.spacing; t1.style.textShadow=st.shadow; t2.style.textShadow=st.shadow; t1.style.textTransform=st.transform; t2.style.textTransform=st.transform; t1.style.color=c; t2.style.color=c; t1.style.fontSize=(0.48*s)+"px"; t2.style.fontSize=(0.48*s)+"px"; }
+        function applyTextConfig(k,l1,l2,s,c) { const st=FONT_STYLES[k]||FONT_STYLES['style1']; const t1=document.getElementById('display-line1'), t2=document.getElementById('display-line2'), ct=document.getElementById('title-container'); ct.style.fontFamily=st.font; t1.innerText=l1; t2.innerText=l2; t1.style.letterSpacing=st.spacing; t2.style.letterSpacing=st.spacing; t1.style.textShadow=st.shadow; t2.style.textShadow=st.shadow; t1.style.textTransform=st.transform; t2.style.textTransform=st.transform; t1.style.color=c; t2.style.color=c; const fk=(window.IS_MOBILE)?0.34:0.48; t1.style.fontSize=(fk*s)+"px"; t2.style.fontSize=(fk*s)+"px"; }
         
         window.toggleMusicPlay=()=> { if(!bgmAudio.src) return alert("请先上传音乐"); if(isMusicPlaying){ bgmAudio.pause(); isMusicPlaying=false; } else { bgmAudio.play(); isMusicPlaying=true; } updatePlayBtnUI(isMusicPlaying); };
         window.replayMusic=()=> { if(!bgmAudio.src) return; bgmAudio.currentTime=0; bgmAudio.play(); isMusicPlaying=true; updatePlayBtnUI(true); };
@@ -191,9 +265,10 @@ const DB_NAME = "GrandTreeDB_v17_Clean";
             STATE.mode = mode;
             STATE.focusTarget = null;
             const hint = document.getElementById('gesture-hint');
-            if(mode === 'TREE') hint.innerText = "状态: 聚合 (圣诞树)";
-            else if(mode === 'SCATTER') hint.innerText = "状态: 散开 (星云)";
-            else if(mode === 'FOCUS') hint.innerText = "状态: 抓取照片";
+            const tip = (typeof IS_MOBILE !== 'undefined' && IS_MOBILE) ? " · 拖动旋转 / 双指缩放" : "";
+            if(mode === 'TREE') hint.innerText = "状态: 聚合 (圣诞树)" + tip;
+            else if(mode === 'SCATTER') hint.innerText = "状态: 散开 (星云)" + tip;
+            else if(mode === 'FOCUS') hint.innerText = "状态: 抓取照片" + tip;
         }
 
         window.triggerPhotoGrab=()=> { 
@@ -279,10 +354,10 @@ window.addEventListener('keydown', (e) => {
             });
         }
 
-        function initThree() { const c=document.getElementById('canvas-container'); scene=new THREE.Scene(); scene.background=new THREE.Color(CONFIG.colors.bg); scene.fog=new THREE.FogExp2(CONFIG.colors.bg,0.01); camera=new THREE.PerspectiveCamera(42,window.innerWidth/window.innerHeight,0.1,1000); camera.position.set(0,2,CONFIG.camera.z); renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"}); renderer.setSize(window.innerWidth,window.innerHeight); renderer.setPixelRatio(Math.min(window.devicePixelRatio,2)); renderer.toneMapping=THREE.ReinhardToneMapping; renderer.toneMappingExposure=2.2; c.appendChild(renderer.domElement); mainGroup=new THREE.Group(); scene.add(mainGroup); }
+        function initThree() { const c=document.getElementById('canvas-container'); scene=new THREE.Scene(); scene.background=new THREE.Color(CONFIG.colors.bg); scene.fog=new THREE.FogExp2(CONFIG.colors.bg,0.01); camera=new THREE.PerspectiveCamera(42,window.innerWidth/window.innerHeight,0.1,1000); camera.position.set(0,2,CONFIG.camera.z); renderer=new THREE.WebGLRenderer({antialias:!IS_MOBILE,alpha:false,powerPreference:"high-performance"}); renderer.setSize(window.innerWidth,window.innerHeight); renderer.setPixelRatio(Math.min(window.devicePixelRatio,IS_MOBILE?1.6:2)); renderer.toneMapping=THREE.ReinhardToneMapping; renderer.toneMappingExposure=2.2; c.appendChild(renderer.domElement); mainGroup=new THREE.Group(); scene.add(mainGroup); }
         function setupEnvironment() { const p=new THREE.PMREMGenerator(renderer); scene.environment=p.fromScene(new RoomEnvironment(),0.04).texture; }
         function setupLights() { scene.add(new THREE.AmbientLight(0xffffff,0.6)); const i=new THREE.PointLight(0xffaa00,2,20); i.position.set(0,5,0); mainGroup.add(i); const s1=new THREE.SpotLight(0xffcc66,1200); s1.position.set(30,40,40); s1.angle=0.5; s1.penumbra=0.5; scene.add(s1); const s2=new THREE.SpotLight(0x6688ff,600); s2.position.set(-30,20,-30); scene.add(s2); const f=new THREE.DirectionalLight(0xffeebb,0.8); f.position.set(0,0,50); scene.add(f); }
-        function setupPostProcessing() { const r=new RenderPass(scene,camera); const b=new UnrealBloomPass(new THREE.Vector2(window.innerWidth,window.innerHeight),1.5,0.4,0.85); b.threshold=0.7; b.strength=0.45; b.radius=0.4; composer=new EffectComposer(renderer); composer.addPass(r); composer.addPass(b); }
+        function setupPostProcessing() { const r=new RenderPass(scene,camera); const b=new UnrealBloomPass(new THREE.Vector2(window.innerWidth,window.innerHeight),1.5,0.4,0.85); b.threshold=0.7; b.strength=IS_MOBILE?0.36:0.45; b.radius=IS_MOBILE?0.32:0.4; composer=new EffectComposer(renderer); composer.addPass(r); composer.addPass(b); }
         function createTextures() { const c=document.createElement('canvas'); c.width=128; c.height=128; const x=c.getContext('2d'); x.fillStyle='#ffffff'; x.fillRect(0,0,128,128); x.fillStyle='#880000'; x.beginPath(); for(let i=-128;i<256;i+=32){x.moveTo(i,0);x.lineTo(i+32,128);x.lineTo(i+16,128);x.lineTo(i-16,0);} x.fill(); caneTexture=new THREE.CanvasTexture(c); caneTexture.wrapS=caneTexture.wrapT=THREE.RepeatWrapping; caneTexture.repeat.set(3,3); }
 
         window.updateSnowSettings=()=> { CONFIG.snow.sizeBase=parseFloat(document.getElementById('slider-snow-size').value); CONFIG.snow.count=parseInt(document.getElementById('slider-snow-count').value); createSnow(); };
@@ -332,9 +407,24 @@ window.addEventListener('keydown', (e) => {
         }
         window.applyParticleSettings=()=>{const ph=particleSystem.filter(p=>p.type==='PHOTO');const tr=[];mainGroup.children.forEach(c=>{if(c!==photoMeshGroup)tr.push(c)});tr.forEach(c=>mainGroup.remove(c));particleSystem=[...ph];CONFIG.particles.count=parseInt(document.getElementById('slider-tree').value);CONFIG.particles.dustCount=parseInt(document.getElementById('slider-dust').value);createParticles();createDust();createSnow();};
 
-        async function initMediaPipe(){videoElement=document.getElementById('webcam-video');if(navigator.mediaDevices?.getUserMedia){try{const s=await navigator.mediaDevices.getUserMedia({video:true});videoElement.srcObject=s;videoElement.onloadedmetadata=()=>{videoElement.play();renderWebcamPreview()};}catch(e){console.error(e)}}try{const v=await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm");handLandmarker=await HandLandmarker.createFromOptions(v,{baseOptions:{modelAssetPath:`https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task`,delegate:"GPU"},runningMode:"VIDEO",numHands:1});predictWebcam();}catch(e){console.warn(e)}}
+        async function initMediaPipe(){
+            videoElement=document.getElementById('webcam-video');
+            if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
+                try{
+                    const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480},frameRate:{ideal:30}},audio:false});
+                    videoElement.srcObject=s; videoElement.onloadedmetadata=()=>{videoElement.play().catch(()=>{});renderWebcamPreview();};
+                }catch(e){console.warn('camera unavailable',e);}
+            }
+            try{
+                const v=await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm");
+                const opts=(delegate)=>({baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",delegate:delegate},runningMode:"VIDEO",numHands:1});
+                try{handLandmarker=await HandLandmarker.createFromOptions(v,opts("GPU"));}
+                catch(errGPU){console.warn('GPU delegate failed, retry CPU',errGPU);handLandmarker=await HandLandmarker.createFromOptions(v,opts("CPU"));}
+                predictWebcam();
+            }catch(e){console.warn(e);}
+        }
         function renderWebcamPreview(){const c=document.getElementById('webcam-canvas'),x=c.getContext('2d',{willReadFrequently:true});function d(){if(videoElement.readyState>=2)x.drawImage(videoElement,0,0,c.width,c.height);requestAnimationFrame(d)}d()}
-        let lvt=-1;async function predictWebcam(){if(videoElement&&videoElement.currentTime!==lvt&&handLandmarker){lvt=videoElement.currentTime;const r=handLandmarker.detectForVideo(videoElement,performance.now());processGestures(r);document.getElementById('cam-status').classList.toggle('active',r.landmarks.length>0);}requestAnimationFrame(predictWebcam);}
+        let lvt=-1,lastDetect=0;async function predictWebcam(){if(videoElement&&handLandmarker&&videoElement.readyState>=2&&videoElement.currentTime!==lvt){const now=performance.now();if(now-lastDetect>=(IS_MOBILE?70:33)){lastDetect=now;lvt=videoElement.currentTime;try{const r=handLandmarker.detectForVideo(videoElement,now);processGestures(r);document.getElementById('cam-status').classList.toggle('active',r.landmarks.length>0);}catch(e){console.warn(e);}}}requestAnimationFrame(predictWebcam);}
         function processGestures(r){if(r.landmarks&&r.landmarks.length>0){STATE.hand.detected=true;const lm=r.landmarks[0];STATE.hand.x=(lm[9].x-0.5)*2;STATE.hand.y=(lm[9].y-0.5)*2;const thumb=lm[4],index=lm[8],wrist=lm[0],middle=lm[12];const pd=Math.hypot(thumb.x-index.x,thumb.y-index.y);const od=Math.hypot(middle.x-wrist.x,middle.y-wrist.y);if(STATE.mode==='FOCUS'){if(pd>0.1)setMode('SCATTER');return;}if(pd<0.05&&STATE.mode!=='FOCUS')triggerPhotoGrab();else if(od>0.4)setMode('SCATTER');else if(od<0.2)setMode('TREE');}else STATE.hand.detected=false;}
 
         window.setupEvents=()=>{
@@ -369,7 +459,7 @@ window.addEventListener('keydown', (e) => {
         window.closeDeleteManager=()=>{document.getElementById('delete-manager').classList.add('hidden')}
 
         function animate() {
-            requestAnimationFrame(animate); const dt=clock.getDelta(); const et=clock.getElapsedTime();
+            requestAnimationFrame(animate); const dt=Math.min(clock.getDelta(),0.05); const et=clock.getElapsedTime();
             if(snowInstancedMesh&&STATE.mode==='TREE'){
                 snowInstancedMesh.visible=true;
                 for(let i=0;i<CONFIG.snow.count;i++){
@@ -390,5 +480,98 @@ if(manualRotateState.x!==0||manualRotateState.y!==0){const s=CONFIG.interaction.
             particleSystem.forEach(p=>p.update(dt,STATE.mode,STATE.focusTarget));
             composer.render();
         }
+        // ================= 移动端运行时 (v17.6.5-m) =================
+        const IS_MOBILE = (window.matchMedia && (window.matchMedia('(max-width: 760px)').matches || window.matchMedia('(hover: none) and (pointer: coarse)').matches)) || /Android|iPhone|iPad|iPod|HarmonyOS|Mobile/i.test(navigator.userAgent);
+        window.IS_MOBILE = IS_MOBILE;
+        if (IS_MOBILE) {
+            CONFIG.particles.count = 700;
+            CONFIG.particles.dustCount = 1000;
+            CONFIG.snow.count = 600;
+            const setSlider = (id, v, max) => { const el = document.getElementById(id); if (el) { if (max) el.max = max; el.value = v; } };
+            setSlider('slider-tree', 700, 1600);
+            setSlider('slider-dust', 1000, 2500);
+            setSlider('slider-snow-count', 600, 1500);
+            const sheet = document.getElementById('left-sidebar');
+            const bottomPanel = document.querySelector('.bottom-left-panel');
+            if (sheet && bottomPanel) sheet.appendChild(bottomPanel);
+            window.__sheet = function (open) {
+                const s = document.getElementById('left-sidebar');
+                if (!s) return;
+                s.style.transition = 'transform .35s cubic-bezier(.4,0,.2,1), opacity .35s';
+                s.style.transform = open ? 'none' : 'translateY(calc(100% + 130px))';
+                s.style.opacity = open ? '1' : '0';
+                s.style.pointerEvents = open ? 'auto' : 'none';
+                window.__sheetOpen = !!open;
+                const btn = document.getElementById('mb-settings');
+                if (btn) btn.style.borderColor = open ? 'rgba(212,175,55,.95)' : 'rgba(212,175,55,.35)';
+            };
+            window.__sheet(false);
+            window.toggleUI = function () { window.__sheet(!window.__sheetOpen); };
+            document.querySelectorAll('button.elegant-btn').forEach(b => {
+                if (!/\((SPACE|Z|X)\)/i.test(b.textContent || '')) return;
+                b.textContent = b.textContent.replace(/\s*\((SPACE|Z|X)\)/gi, '').trim();
+            });
+            document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
+        }
+
+        window.toggleFullScreen = function () {
+            const el = document.documentElement;
+            const req = el.requestFullscreen || el.webkitRequestFullscreen;
+            const exit = document.exitFullscreen || document.webkitExitFullscreen;
+            const active = document.fullscreenElement || document.webkitFullscreenElement;
+            if (!active) {
+                if (!req) { window.toggleUI(); return; }
+                try { const p = req.call(el); if (p && p.catch) p.catch(() => window.toggleUI()); } catch (err) { window.toggleUI(); }
+            } else if (exit) { try { exit.call(document); } catch (err) {} }
+        };
+
+        (function mobileInput() {
+            const surface = document.getElementById('canvas-container');
+            if (surface) {
+                surface.style.touchAction = 'none';
+                const ptrs = new Map();
+                let pinch = 0;
+                surface.addEventListener('pointerdown', e => { ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); try { surface.setPointerCapture(e.pointerId); } catch (_) {} });
+                surface.addEventListener('pointermove', e => {
+                    const p = ptrs.get(e.pointerId); if (!p) return;
+                    const dx = e.clientX - p.x, dy = e.clientY - p.y; p.x = e.clientX; p.y = e.clientY;
+                    if (ptrs.size === 1) {
+                        STATE.rotation.y += dx * 0.006;
+                        STATE.rotation.x = Math.max(-1.0, Math.min(1.0, STATE.rotation.x + dy * 0.004));
+                        manualRotateState = { x: 0, y: 0 };
+                    } else if (ptrs.size === 2) {
+                        const a = [...ptrs.values()];
+                        const d = Math.hypot(a[0].x - a[1].x, a[0].y - a[1].y);
+                        if (pinch && camera) camera.position.z = Math.max(26, Math.min(88, camera.position.z - (d - pinch) * 0.22));
+                        pinch = d;
+                    }
+                }, { passive: true });
+                const release = e => { ptrs.delete(e.pointerId); if (ptrs.size < 2) pinch = 0; };
+                ['pointerup', 'pointercancel', 'pointerleave'].forEach(n => surface.addEventListener(n, release));
+            }
+
+            document.querySelectorAll('.dir-btn[onmousedown]').forEach(el => {
+                const m = (el.getAttribute('onmousedown') || '').match(/startRotate\('(\w+)'\)/);
+                if (!m) return;
+                const dir = m[1];
+                el.onmousedown = null; el.onmouseup = null; el.onmouseleave = null;
+                el.addEventListener('pointerdown', ev => { ev.preventDefault(); window.startRotate(dir); });
+                ['pointerup', 'pointercancel', 'pointerleave'].forEach(n => el.addEventListener(n, () => window.stopRotate()));
+            });
+
+            const bind = (id, fn) => { const el = document.getElementById(id); if (el) el.addEventListener('click', fn); };
+            bind('mb-tree', () => window.setMode('TREE'));
+            bind('mb-scatter', () => window.setMode('SCATTER'));
+            bind('mb-grab', () => window.triggerPhotoGrab());
+            bind('mb-cam', () => window.toggleCameraDisplay());
+            bind('mb-settings', () => { if (window.__sheet) window.__sheet(!window.__sheetOpen); });
+
+            const unlock = () => {
+                if (bgmAudio && bgmAudio.src) bgmAudio.play().then(() => { isMusicPlaying = true; updatePlayBtnUI(true); }).catch(() => {});
+                document.removeEventListener('pointerdown', unlock);
+            };
+            document.addEventListener('pointerdown', unlock);
+        })();
+
         init();
     </script></body></html>

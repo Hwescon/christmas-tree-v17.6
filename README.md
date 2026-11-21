@@ -45,17 +45,40 @@ start http://127.0.0.1:8123/index.html
 - 手势需要摄像头权限（距离 20–30cm、手倾斜约 45°、光线充足）。
 - 键盘：`空格` 聚合 / `Z` 散开 / `X` 抓照片 / 方向键旋转；鼠标拖标题、滑块调密度与雪花。
 
+## 手机端改造（v17.6.5-m）
+
+同一个 `index.html`，桌面/手机自适应，**手机上直接开网址就能用**：
+
+- **判定**：`(max-width: 760px)` 或 `(hover: none) and (pointer: coarse)`，外加移动端 UA 兜底 → 手机横屏也算移动端。
+- **触控**：单指在画面上拖动 = 旋转（直接推 `STATE.rotation`），双指捏合 = 拉近拉远（`camera.position.z` 26–88）；
+  方向键、标题拖动全部改用 Pointer Events，触摸/鼠标同一套代码。
+- **布局**：左侧长面板改成底部抽屉（`58dvh`，可滚动，收起时 `translateY` 移出屏幕）；
+  底部新增 5 键工具条：`聚合 / 散开 / 抓图 / 镜头 / 设置`；摄像头预览缩到 96×72 放左上角；
+  按钮/滑杆提升到 38–44px 触摸目标，输入框 16px 防 iOS 聚焦缩放；适配 `env(safe-area-inset-*)` 刘海与小白条。
+- **性能**：粒子 1500→700、星尘 2500→1000、雪花 1500→600；`devicePixelRatio` 封顶 1.6、关掉 MSAA、
+  bloom 减弱；`dt` 限幅 0.05（顺带修掉了低帧率下粒子指数飞散的问题）。
+- **AI 与摄像头**：`facingMode:'user'` + 640×480 约束；MediaPipe 先试 GPU，失败自动回落 CPU；
+  检测帧率在手机上限到约 14fps。
+- **iOS**：全屏 API 缺失时降级为“隐藏界面”；首次触摸解锁音频；禁用双击缩放与页面回弹。
+
+手机端操作：`聚合 / 散开 / 抓图` 点底部按钮，`设置` 拉出抽屉（祝福语、字体、粒子、音乐、照片都在里面），
+`镜头` 收起/显示摄像头小窗；手势仍可用（张开手掌=散开、握拳=聚合、捏合=抓照片）。
+
 ## 已知坑（实测）
 
 - 软件渲染（headless SwiftShader）下帧间隔 dt 会到 0.3s 以上，`position.lerp(target, 4*dt)` 的系数 >1，
-  粒子会指数级飞散、树看不见。真机 GPU（本机 AMD Vega 8）60fps 无此问题；
-  如果某台机器很卡，可在 `animate()` 里把 `dt` 卡一下：`dt = Math.min(dt, 0.05);`。
-- 首次加载依赖 CDN，网络差会一直停在 `SYSTEM INITIALIZING`。
+  粒子会指数级飞散、树看不见。现已统一 `dt = Math.min(clock.getDelta(), 0.05)`，软件渲染也不会再炸。
+- 首次加载依赖 CDN，网络差会一直停在 `SYSTEM INITIALIZING`；手机上建议 Wi-Fi。
+- 手机端为性能考虑默认只生成 700 个装饰，想要更密可在“粒子控制”里把「装饰密度」拉到 1600。
 
 ## 文件
 
-- `index.html` —— 修好换行、可直接运行的完整单文件应用
+- `index.html` —— 修好换行 + 手机适配的完整单文件应用（桌面/手机同一份）
 - `raw_text_from_feishu.txt` —— 从飞书块里原样拼出的代码文本（未修复换行，留档）
 - `full_doc.txt` —— 整篇文档的纯文本（含源提示词与排障说明）
-- `shots/tree_mode2.png` —— 聚合态（圣诞树）实跑截图
-- `shots/scatter_mode.png` —— 散开态（星云）实跑截图
+- `shots/tree_mode2.png` / `shots/scatter_mode.png` —— 桌面：聚合态 / 散开态
+- `shots/mobile_portrait.png` —— 手机竖屏（iPhone 尺寸模拟）
+- `shots/mobile_landscape.png` —— 手机横屏
+- `shots/tablet_portrait.png` —— 平板竖屏
+- `shots/mobile_sheet.png` —— 手机端设置抽屉展开
+- `shots/mobile_focus.png` —— 手机端散开态
